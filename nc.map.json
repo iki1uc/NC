@@ -1,1 +1,11 @@
+{
+  "nc.map": {
+    "E": "/E/tmp.e",
+    "H": "/H/tmp.h",
+    "G": "/G/tmp.g",
+    "A": "/A/tmp.a",
+    "S": "/S/tmp.s",
+    "O": "/O/tmp.o"
+  }
+}
 
