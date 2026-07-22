@@ -1,1 +1,8 @@
+{
+  "nc.raw": {
+    "axes": 12,
+    "tmp.count": 31,
+    "dock6E": ["tmp.e","tmp.h","tmp.g","tmp.a","tmp.s","tmp.o"]
+  }
+}
 
