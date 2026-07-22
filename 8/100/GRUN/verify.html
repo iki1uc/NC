@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>GRÜN · VERIFY · Arbeits‑Tüchtigkeit · GEO‑Vektor · NC² · 6D · 12e</title>
+
+<style>
+  body { background:#000; color:#00ff88; font-family:Consolas; padding:20px; }
+  h1,h2 { color:#33ffcc; text-shadow:0 0 10px #00ff88; }
+  .block { background:#111; border:1px solid #333; padding:15px; margin:20px 0; border-radius:8px; }
+  pre { background:#000; border:1px solid #333; padding:12px; border-radius:6px; }
+  .ok { color:#00ff88; }
+  .mid { color:#ffff33; }
+  .bad { color:#ff4444; }
+</style>
+
+<script>
+// ------------------------------------------------------
+// GRÜN VERIFY · Arbeits‑Tüchtigkeit · GEO‑Vektor · NC² · 6D · 12e
+// ------------------------------------------------------
+
+// Dateien im GRÜN-System
+const FILES = [
+  "BEN.tmp","DA.tmp","NE.tmp",
+  "C.tmp","X.tmp","Z.tmp",
+  "ORT.scan","scan.language",
+  "gone.room","ID.html",
+  "index.html","verify.html",
+  "README.md"
+];
+
+// Tech-Dateien
+const TECH = [
+  "NC²","NC² (1)","NC²□.sync",
+  "NC²octa².dual","NC²octa²□.merge",
+  "NC²□.lock","NC²□.sync",
+  "NC²□octa³.align",
+  "6D-Baum.raw","12e allin allout.room"
+];
+
+// Datei laden
+async function loadFile(name){
+  try{
+    const res = await fetch("./" + name);
+    if(!res.ok) return { name, ok:false };
+    const txt = await res.text();
+    return { name, ok:true, content:txt };
+  }catch(e){
+    return { name, ok:false };
+  }
+}
+
+// GEO‑Vektor‑Analyse (NC² / 6D / 12e)
+function geoVector(content){
+  return {
+    NC2: content.length,
+    D6: content.split("\n").length,
+    E12: content.includes("ERR") ? "kritisch" : "neutral"
+  };
+}
+
+// Arbeits‑Tüchtigkeit bestimmen
+function arbeitsT(content){
+  if(!content.ok) return "FEHLT";
+  if(content.content.includes("ERR")) return "ORANGE";
+  return "GRÜN";
+}
+
+// 360°‑Matrix erzeugen
+function matrix(results){
+  return {
+    A: results.filter(r => ["BEN.tmp","DA.tmp","NE.tmp"].includes(r.name)),
+    B: results.filter(r => ["C.tmp","X.tmp","Z.tmp"].includes(r.name)),
+    SYS: results.filter(r => ["ORT.scan","scan.language","gone.room"].includes(r.name)),
+    META: results.filter(r => ["ID.html","index.html","verify.html","README.md"].includes(r.name))
+  };
+}
+
+// Score berechnen
+function calcScore(results){
+  let score = 0;
+  results.forEach(r => {
+    if(r.ok) score += 5;
+    if(r.content && r.content.includes("ERR")) score -= 3;
+  });
+  return score;
+}
+
+// Start
+async function start(){
+  const results = [];
+
+  for(const f of [...FILES, ...TECH]){
+    results.push(await loadFile(f));
+  }
+
+  const out = document.getElementById("verify");
+
+  results.forEach(r => {
+    const vec = r.ok ? geoVector(r.content) : { NC2:0, D6:0, E12:"FEHLT" };
+    const at = arbeitsT(r);
+
+    const div = document.createElement("div");
+    div.className = "block";
+    div.innerHTML = `
+      <h2 class="${at === 'GRÜN' ? 'ok' : at === 'ORANGE' ? 'mid' : 'bad'}">
+        ${r.name} — ${at}
+      </h2>
+      <pre>${r.ok ? r.content.substring(0,300) : "FEHLT"}</pre>
+      <pre>
+NC²‑Vektor: ${vec.NC2}
+6D‑Vektor: ${vec.D6}
+12e‑Status: ${vec.E12}
+      </pre>
+    `;
+    out.appendChild(div);
+  });
+
+  document.getElementById("score").textContent = calcScore(results) + "%";
+  document.getElementById("matrix").textContent = JSON.stringify(matrix(results), null, 2);
+}
+</script>
+</head>
+
+<body onload="start()">
+
+<h1>GRÜN · VERIFY · Arbeits‑Tüchtigkeit · GEO‑Vektor · NC² · 6D · 12e</h1>
+
+<div class="block">
+  <h2>Arbeits‑Tüchtigkeits‑Score</h2>
+  <pre id="score">…</pre>
+</div>
+
+<div class="block">
+  <h2>360°‑Matrix</h2>
+  <pre id="matrix">…</pre>
+</div>
+
+<div id="verify"></div>
+
+</body>
+</html>

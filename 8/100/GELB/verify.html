@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>GELB · VERIFY · Lauffähigkeit · NC² · 6D · 12e · GEO‑Vektor</title>
+
+<style>
+  body { background:#000; color:#ffff33; font-family:Consolas; padding:20px; }
+  h1,h2 { color:#ffd700; text-shadow:0 0 10px #ff0; }
+  .block { background:#111; border:1px solid #444; padding:15px; margin:20px 0; border-radius:8px; }
+  pre { background:#000; border:1px solid #333; padding:12px; border-radius:6px; }
+</style>
+
+<script>
+// ------------------------------------------------------
+// GELB VERIFY · Lauffähigkeit · NC² · 6D · 12e · GEO‑Vektor
+// ------------------------------------------------------
+
+// Dateien im GELB-System
+const FILES = [
+  "BEN.tmp","DA.tmp","NE.tmp",
+  "C.tmp","X.tmp","Z.tmp",
+  "ORT.scan","scan.language",
+  "ID.html","index.html","README.md"
+];
+
+// Tech-Dateien
+const TECH = [
+  "NC²","NC² (1)","NC²□.sync",
+  "NC²octa².dual","NC²octa²□.merge",
+  "NC²□.lock","NC²□.sync",
+  "NC²□octa³.align",
+  "6D-Baum.raw","12e allin allout.room"
+];
+
+// Datei laden
+async function loadFile(name){
+  try{
+    const res = await fetch("./" + name);
+    if(!res.ok) return { name, ok:false };
+    const txt = await res.text();
+    return { name, ok:true, content:txt };
+  }catch(e){
+    return { name, ok:false };
+  }
+}
+
+// GEO‑Vektor‑Analyse (NC² / 6D / 12e)
+function geoVector(content){
+  return {
+    NC2: content.length,
+    D6: content.split("\n").length,
+    E12: content.includes("ERR") ? "kritisch" : "neutral"
+  };
+}
+
+// Lauffähigkeit bestimmen
+function lauffaehigkeit(result){
+  if(!result.ok) return "FEHLT";
+  if(result.content.includes("ERR")) return "ORANGE";
+  return "GELB";
+}
+
+// Start
+async function start(){
+  const results = [];
+
+  for(const f of [...FILES, ...TECH]){
+    results.push(await loadFile(f));
+  }
+
+  const out = document.getElementById("verify");
+
+  results.forEach(r => {
+    const vec = r.ok ? geoVector(r.content) : { NC2:0, D6:0, E12:"FEHLT" };
+    const lf = lauffaehigkeit(r);
+
+    const div = document.createElement("div");
+    div.className = "block";
+    div.innerHTML = `
+      <h2>${r.name} — ${lf}</h2>
+      <pre>${r.ok ? r.content.substring(0,300) : "FEHLT"}</pre>
+      <pre>
+NC²‑Vektor: ${vec.NC2}
+6D‑Vektor: ${vec.D6}
+12e‑Status: ${vec.E12}
+      </pre>
+    `;
+    out.appendChild(div);
+  });
+}
+</script>
+</head>
+
+<body onload="start()">
+
+<h1>GELB · VERIFY · Lauffähigkeit · NC² · 6D · 12e · GEO‑Vektor</h1>
+
+<div class="block">
+  <h2>Datei‑Status & GEO‑Analyse</h2>
+  <div id="verify"></div>
+</div>
+
+</body>
+</html>

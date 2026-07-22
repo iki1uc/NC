@@ -1,0 +1,22 @@
+[ORT.scan]
+version = 1.0
+type    = "welt-ort-scan"
+
+ort.map = [
+  "DE.room",
+  "TR.room",
+  "EN.room",
+  "DA.html",
+  "NE.html",
+  "BEN.html",
+  "WELT.portal",
+  "WELT.layer",
+  "WELT.sync",
+  "EDEN.element.glyphs",
+  "HI.layer",
+  "screen.room",
+  "port.visuals"
+]
+
+ort.output = "ORT.scan.final"
+ort.state  = "active"
