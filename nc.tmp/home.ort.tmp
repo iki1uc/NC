@@ -28,8 +28,10 @@
   "respo": {
     "name": "USE-C-Lage",
     "lage": "gelb-gruen",
-    "operator.ort": "(+(-(USE)x)y)z)",
-    "operator.home": "(+(-(und(USER)t)b)h)",
+    "operator": {
+      "ort": "(+(-(USE)x)y)z)",
+      "home": "(+(-(und(USER)t)b)h)"
+    },
     "stabil": 0.618
   }
 }
