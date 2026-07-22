@@ -1,0 +1,10 @@
+NC.².merge = {
+    id: "NC².merge",
+    axis_nc2: "□",
+    axis_octa: "octa²",
+    merge: "NC².merge.core",
+    sync: "NC².sync",
+    pulse: "NC².pulse",
+    error: "NC².error"
+}
+
