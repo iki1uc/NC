@@ -2,122 +2,106 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>ANKER – S01 · iki1uc</title>
+<title>NC System – 9×9</title>
 
 <style>
-body { background:#000; color:#0f0; font-family:monospace; padding:40px; }
-h1 { color:#0f0; letter-spacing:4px; margin-bottom:30px; }
-.block { background:#111; border:1px solid #333; padding:25px; margin-bottom:30px; border-radius:8px; }
-.title { font-size:22px; color:#6cf; margin-bottom:10px; }
-pre { background:#000; border-left:3px solid #6cf; padding:15px; margin-top:10px; white-space:pre-wrap; }
-a { color:#6cf; text-decoration:none; font-weight:bold; }
+    body { background:#111; color:#eee; font-family:Arial; text-align:center; }
+    #board {
+        display:grid;
+        grid-template-columns:repeat(9, 50px);
+        grid-template-rows:repeat(9, 50px);
+        gap:4px;
+        margin:40px auto;
+        width:480px;
+    }
+    .cell {
+        width:50px; height:50px;
+        background:#222;
+        border:1px solid #444;
+        font-size:28px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        transition:0.2s;
+    }
+    .cell:hover { background:#333; }
+
+    .rot   { color:#ff4444; }
+    .gruen { color:#44ff44; }
+    .gelb  { color:#ffff44; }
 </style>
-
-<!-- SYSTEM CORE MODULES -->
-<script src="../HH/cr/RESPO.core.js"></script>
-<script src="../HH/cr/AXI.core.js"></script>
-<script src="../HH/cr/TEM.core.js"></script>
-<script src="../HH/cr/RUN8.core.js"></script>
-
-<!-- ID MODULES -->
-<script src="IDkoop.js"></script>
-<script src="IDneutral.js"></script>
-<script src="IDpook.js"></script>
-
 </head>
 
 <body>
 
-<h1>ANKER – S01 · iki1uc</h1>
-
-<!-- ACHSEN STATUS -->
-<div class="block">
-    <div class="title">Stabilisationsachse</div>
-    <p id="axis-status">Lade Achsen…</p>
-</div>
-
-<!-- IDENTITÄT -->
-<div class="block">
-    <div class="title">Identität</div>
-    <p>
-        <a href="id.html">→ ANKER‑Identität öffnen</a>
-    </p>
-    <pre id="id-status"></pre>
-</div>
-
-<!-- ACHSEN LISTE -->
-<div class="block">
-    <div class="title">Stabilisierte Achsen</div>
-    <pre id="axis-list"></pre>
-</div>
-
-<!-- RESPO STATUS -->
-<div class="block">
-    <div class="title">RESPO‑Status</div>
-    <pre id="respo-status"></pre>
-</div>
-
-<!-- SYSTEM STATUS -->
-<div class="block">
-    <div class="title">System‑Status</div>
-    <pre id="system-status"></pre>
-</div>
+<h1>NC – 9×9 Matrix</h1>
+<div id="board"></div>
 
 <script>
-(async function () {
-
-    /* -------------------------------
-       ANKER DATEN LADEN
-    --------------------------------*/
-    const anker = await fetch("ANKER.json").then(r => r.json()).catch(() => null);
-    const raw = await fetch("ANKER.raw").then(r => r.text()).catch(() => "");
-
-    document.getElementById("axis-list").innerText = raw || "Keine Achsen gefunden";
-
-
-    /* -------------------------------
-       AXI ENGINE
-    --------------------------------*/
-    const axi = AXI_CORE();
-    document.getElementById("axis-status").innerText =
-        axi ? "Achsen stabil" : "Achsenfehler";
-
-
-    /* -------------------------------
-       RESPO ENGINE
-    --------------------------------*/
-    const respo = RESPO_CORE(anker || {});
-    document.getElementById("respo-status").innerText =
-        `Score: ${respo.score}\nStatus: ${respo.ok ? "STABIL" : "KRITISCH"}`;
-
-
-    /* -------------------------------
-       ID MODUS ERKENNEN
-    --------------------------------*/
-    let idMode = "neutral";
-    if (ID_KOOP?.active) idMode = "koop";
-    if (ID_POOK?.active) idMode = "pook";
-
-    const idMap = {
-        koop: ID_KOOP,
-        neutral: ID_NEUTRAL,
-        pook: ID_POOK
+    // 1000 → Oberstufe
+    const NC_SCALE = {
+        master: 1000,
+        internal: [900,800,700,600,500,400,300,200,100],
+        cube: [1,2,3,4,8,9]
     };
 
-    document.getElementById("id-status").innerText =
-        `Modus: ${idMode.toUpperCase()}\nInfo: ${idMap[idMode].info()}`;
+    // ROT → GRÜN → GELB
+    let current = "rot";
 
+    function nextPlayer() {
+        if (current === "rot") current = "gruen";
+        else if (current === "gruen") current = "gelb";
+        else current = "rot";
+    }
 
-    /* -------------------------------
-       SYSTEM STATUS
-    --------------------------------*/
-    const tem = TEM_CORE();
-    const run8 = RUN8();
+    // RESPO SEND
+    function sendEvent(x, y, player) {
+        console.log("SEND:", {x, y, player});
+    }
 
-    document.getElementById("system-status").innerText =
-        `Zeit: ${tem.timestamp}\nKernel: ${run8.run}\nSystem: OK`;
+    // ORT RECEIVE
+    function receiveEvent(x, y, player) {
+        console.log("RECEIVE:", {x, y, player});
+    }
 
-})();
+    // 6D – alle Richtungen offen
+    function sixD(x, y) {
+        return {
+            plusX: x+1, minusX: x-1,
+            plusY: y+1, minusY: y-1,
+            plusZ: "open", minusZ: "open"
+        };
+    }
+
+    // 9×9 erzeugen
+    const board = document.getElementById("board");
+
+    for (let y = 0; y < 9; y++) {
+        for (let x = 0; x < 9; x++) {
+
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.dataset.x = x;
+            cell.dataset.y = y;
+
+            cell.addEventListener("click", () => {
+                if (cell.innerHTML !== "") return;
+
+                cell.innerHTML = "●";
+                cell.classList.add(current);
+
+                sendEvent(x, y, current);
+                receiveEvent(x, y, current);
+
+                console.log("6D:", sixD(x, y));
+
+                nextPlayer();
+            });
+
+            board.appendChild(cell);
+        }
+    }
 </script>
 
 </body>
