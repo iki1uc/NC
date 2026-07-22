@@ -1,0 +1,8 @@
+{
+  "nc.geo": {
+    "type": "cube+pyramid",
+    "dimensions": "6D",
+    "matrix": "9x9",
+    "vector": "12E"
+  }
+}
