@@ -1,0 +1,9 @@
+[X.tmp]
+version = 1.0
+type    = "universum-tmp"
+
+tmp.name = "X.tmp"
+tmp.role = "wirkung"
+tmp.mode = ["swap","handover","leave","vector"]
+tmp.output = "X.tmp.final"
+tmp.state  = "active"
