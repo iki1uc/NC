@@ -1,0 +1,7 @@
+{
+  "nc.matrix": {
+    "active": "matrix.512.json",
+    "fallback": ["matrix.256.json","matrix.128.json","matrix.81.json"],
+    "mode": "9x9"
+  }
+}
