@@ -1,0 +1,8 @@
+{
+  "nc.respo": {
+    "pipeline.3": "collect.tmp",
+    "pipeline.6": "execute.bind",
+    "respo.core": "scan.respo.core.json",
+    "respo.bind": "respo.bind.json"
+  }
+}
