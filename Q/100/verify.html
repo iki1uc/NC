@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>VERIFY · 100% · Vollsystemkern · 360° · EVO</title>
+
+<style>
+  body { background:#000; color:#0ff; font-family:Consolas; padding:20px; }
+  h1, h2 { color:#33ffff; }
+  .block { background:#111; border:1px solid #333; padding:15px; margin:20px 0; }
+  pre { background:#000; border:1px solid #333; padding:12px; }
+</style>
+
+<script>
+// ------------------------------------------------------
+// VERIFY 100% · Vollsystemkern · 360° · EVO
+// ------------------------------------------------------
+
+// Dateien im 100%-System
+const FILES = [
+  "REAL.index",
+  "ID.html",
+  "NC²□.sync",
+  "dimension-bedeutung-4.csv",
+  "index.html",
+  "README.md"
+];
+
+// 360°-Matrix-Struktur
+function matrix360(){
+  return {
+    cube: {
+      front: null,
+      back: null,
+      left: null,
+      right: null,
+      top: null,
+      bottom: null
+    },
+    opta2: {},
+    opta3: {},
+    heatmap: {},
+    respo: {},
+    evo: {}
+  };
+}
+
+// Datei laden
+async function loadFile(name){
+  try{
+    const res = await fetch("./" + name);
+    if(!res.ok) return { name, ok:false };
+    const txt = await res.text();
+    return { name, ok:true, content:txt };
+  }catch(e){
+    return { name, ok:false };
+  }
+}
+
+// Start
+async function start(){
+  const results = [];
+  for(const f of FILES){
+    results.push(await loadFile(f));
+  }
+
+  // Ausgabe der Dateien
+  const out = document.getElementById("verify");
+  results.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "block";
+    div.innerHTML = `
+      <h2>${r.name}</h2>
+      <pre>${r.ok ? r.content.substring(0,500) : "FEHLT"}</pre>
+    `;
+    out.appendChild(div);
+  });
+
+  // 360°-Matrix anzeigen
+  document.getElementById("matrix").textContent =
+    JSON.stringify(matrix360(), null, 2);
+}
+</script>
+</head>
+
+<body onload="start()">
+
+<h1>VERIFY · 100% · Vollsystemkern · 360° · EVO</h1>
+
+<div class="block">
+  <h2>Datei‑Status & Inhalte</h2>
+  <div id="verify"></div>
+</div>
+
+<div class="block">
+  <h2>360°‑Matrix (Cube / Opta² / Opta³ / Heatmap / Respo / EVO)</h2>
+  <pre id="matrix">…</pre>
+</div>
+
+</body>
+</html>
