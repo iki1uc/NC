@@ -1,1 +1,9 @@
+{
+  "respo.core": {
+    "source": "pipeline.respo/result",
+    "bind": "nc.tmp/operator.tmp",
+    "mode": "6E+6D",
+    "vector": "active"
+  }
+}
 
