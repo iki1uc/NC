@@ -1,0 +1,16 @@
+{
+  "nc.12e": {
+    "E1": "dock6E",
+    "E2": "lage6D",
+    "E3": "error/help/fit",
+    "E4": "arg/xarg/3tearg",
+    "E5": "x/c/z/q",
+    "E6": "pferd/dame/bauer/octa",
+    "E7": "morph/edit/operator",
+    "E8": "schachac/skat/tetriz/score",
+    "E9": "state/frame/tick/time",
+    "E10": "angle/rotate/spin/flip",
+    "E11": "xraum/yraum/zraum/uc",
+    "E12": "env/ctx/infl/cond"
+  }
+}
