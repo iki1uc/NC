@@ -1,2 +1,1 @@
-{ "operator": "X", "mode": "switch", "value": 1 }
-
+{ "operator": "Z", "mode": "zero", "value": 0 }
