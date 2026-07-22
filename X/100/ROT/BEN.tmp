@@ -1,0 +1,5 @@
+[BEN.tmp]
+type = "attack-tmp"
+role = "ich"
+prefetch = ["BEN→DA","BEN→NE"]
+end.tmp = "BEN.end"

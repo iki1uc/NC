@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>100 – Vollsystemkern · iki1uc</title>
+
+<style>
+body {
+    background:#000;
+    color:#0f0;
+    font-family:monospace;
+    padding:40px;
+}
+h1 {
+    color:#0f0;
+    letter-spacing:4px;
+    margin-bottom:30px;
+}
+.block {
+    background:#111;
+    border:1px solid #333;
+    padding:25px;
+    margin-bottom:30px;
+    border-radius:8px;
+}
+.title {
+    font-size:22px;
+    color:#6cf;
+    margin-bottom:10px;
+}
+a {
+    color:#6cf;
+    text-decoration:none;
+    font-weight:bold;
+    display:block;
+    margin:4px 0;
+}
+pre {
+    background:#000;
+    border-left:3px solid #6cf;
+    padding:15px;
+    margin-top:10px;
+    white-space:pre-wrap;
+}
+#sysStatus {
+    background:#000;
+    border-left:3px solid #f0f;
+    padding:15px;
+    margin-top:10px;
+    white-space:pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<h1>100 – Vollsystemkern · iki1uc</h1>
+
+<!-- SYSTEM AKTIVIERUNG -->
+<div class="block">
+    <div class="title">100%-System</div>
+    <pre>
+NAME:        100
+ROOT:        iki1uc
+SYSTEM:      6E
+MODUL:       100
+DIM:         100%
+ROLLE:       Vollsystem / Komplettkern / 100%-Ebene
+FUNKTION:    Aktiviert alle Module, Achsen, Dimensionen und Router vollständig
+POSITION:    100%-Ebene
+DNA:         Α64
+ROUTER:      6D-Router-Matrix
+TMP-LÄUFER:  SYQ
+STATUS:      STABIL
+READY:       100%
+    </pre>
+</div>
+
+<!-- IDENTITÄT -->
+<div class="block">
+    <div class="title">Identität</div>
+    <a href="ID.html">→ 100‑Identität öffnen</a>
+</div>
+
+<!-- MODULE -->
+<div class="block">
+    <div class="title">Module</div>
+    <a href="../AXI/index.html">AXI – Achsen</a>
+    <a href="../6d/index.html">6D – Dimensionen</a>
+    <a href="../360/index.html">360 – Rotation</a>
+    <a href="../ANKER/index.html">ANKER – Stabilisierung</a>
+    <a href="../API/index.html">API – Datenkern</a>
+    <a href="../GEO/index.html">GEO – Geometrie</a>
+    <a href="../FREQ/index.html">FREQ – Frequenzen</a>
+    <a href="../SETter/index.html">SETter – Set‑System</a>
+    <a href="../ALLin/index.html">ALLin – Input</a>
+    <a href="../ALLout/index.html">ALLout – Output</a>
+</div>
+
+<!-- SYSTEM STATUS -->
+<div class="block">
+    <div class="title">System‑Status</div>
+    <pre id="sysStatus">Lade…</pre>
+</div>
+
+<script type="module">
+import DIM from "./dimension-bedeutung-4.csv" assert { type:"json" };
+import NC from "../ART.link/NC.json" assert { type:"json" };
+import ORBIT from "../ART.link/orbit.json" assert { type:"json" };
+
+function updateStatus() {
+    const s = document.getElementById("sysStatus");
+
+    s.innerHTML =
+        "Systemkern: OK\n" +
+        "Dimensionen geladen: " + (DIM ? "OK" : "NEIN") + "\n" +
+        "NC² Sync: " + (NC.sync.axis ? "OK" : "NEIN") + "\n" +
+        "Orbit‑Heatmap: " + (ORBIT.paths.length > 0 ? "OK" : "NEIN") + "\n" +
+        "Router: 6D‑Matrix aktiv\n" +
+        "DNA: Α64 aktiv\n" +
+        "TMP‑Läufer: SYQ\n" +
+        "Status: 100%\n";
+}
+
+setInterval(updateStatus, 500);
+</script>
+
+</body>
+</html>

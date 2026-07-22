@@ -1,0 +1,9 @@
+[Z.tmp]
+version = 1.0
+type    = "universum-tmp"
+
+tmp.name = "Z.tmp"
+tmp.role = "ghost"
+tmp.mode = ["swap","handover","leave","vector"]
+tmp.output = "Z.tmp.final"
+tmp.state  = "active"
