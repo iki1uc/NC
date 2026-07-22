@@ -1,0 +1,9 @@
+{
+  "nc.tmp.index": {
+    "count": 31,
+    "axes": 12,
+    "dimensions": 6,
+    "matrix": "9x9",
+    "dock6E": ["tmp.e","tmp.h","tmp.g","tmp.a","tmp.s","tmp.o"]
+  }
+}
