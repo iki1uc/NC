@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>ROT · INDEX · EVO · NC² · 6D · 12e · PUZZLE · ARG</title>
+
+<style>
+  body { background:#000; color:#ff4444; font-family:Consolas; padding:20px; }
+  h1, h2 { color:#ff6666; }
+  .block { background:#111; border:1px solid #333; padding:15px; margin:20px 0; }
+  pre { background:#000; border:1px solid #333; padding:12px; }
+
+  .cube-face {
+    width:120px; height:120px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin:10px;
+    font-weight:bold;
+    cursor:pointer;
+    border:2px solid #222;
+  }
+</style>
+
+<script>
+// ------------------------------------------------------
+// ROT INDEX · EVO · NC² · 6D · 12e · PUZZLE · ARG
+// ------------------------------------------------------
+
+// verify laden
+async function loadVerify(){
+  const res = await fetch("verify.html");
+  const txt = await res.text();
+  return txt;
+}
+
+// Farben aus verify bestimmen
+function getColor(verify){
+  if(verify.includes("Fehlerquelle")) return "#ff4444";
+  if(verify.includes("Stabil")) return "#00ff88";
+  return "#666";
+}
+
+// Cube erzeugen
+function buildCube(verify){
+  const faces = ["Front","Back","Left","Right","Top","Bottom"];
+  const cube = document.getElementById("cube");
+
+  faces.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "cube-face";
+    div.style.background = getColor(verify);
+    div.innerHTML = f;
+    div.onclick = () => zoomDetail(f, verify);
+    cube.appendChild(div);
+  });
+}
+
+// Zoom‑Detail‑Sicht
+function zoomDetail(face, verify){
+  document.getElementById("zoom").textContent =
+    "ZOOM: " + face + "\n\n" + verify;
+}
+
+// reCALL – Daten zurückholen
+function reCALL(verify){
+  return verify.substring(0,200);
+}
+
+// PUZZLE – Daten reorganisieren
+function PUZZLE(verify){
+  return verify.split("").reverse().join("").substring(0,200);
+}
+
+// ARG‑System – arg / xARG / 3te ARG
+function ARG(verify){
+  return {
+    arg: verify.substring(0,50),
+    xARG: verify.substring(50,100),
+    ARG3: verify.substring(100,150)
+  };
+}
+
+// Heatmap
+function buildHeatmap(verify){
+  document.getElementById("heatmap").textContent =
+    "Heatmap:\n" + verify;
+}
+
+// Respo‑Vergleich
+function buildRespo(verify){
+  document.getElementById("respo").textContent =
+    "Respo‑Vergleich:\n" + verify;
+}
+
+// EVO‑Score
+function buildScore(verify){
+  let score = 0;
+
+  if(verify.includes("Stabil")) score += 50;
+  if(verify.includes("Fehlerquelle")) score -= 25;
+
+  document.getElementById("score").textContent =
+    "EVO‑Score: " + score + "%";
+}
+
+// Start
+async function start(){
+  const verify = await loadVerify();
+
+  buildCube(verify);
+  buildHeatmap(verify);
+  buildRespo(verify);
+  buildScore(verify);
+
+  document.getElementById("recall").textContent = reCALL(verify);
+  document.getElementById("puzzle").textContent = PUZZLE(verify);
+
+  const a = ARG(verify);
+  document.getElementById("arg").textContent =
+    "ARG: " + a.arg + "\n\nxARG: " + a.xARG + "\n\n3te ARG: " + a.ARG3;
+}
+</script>
+</head>
+
+<body onload="start()">
+
+<h1>ROT · INDEX · EVO · NC² · 6D · 12e · PUZZLE · ARG</h1>
+
+<div class="block">
+  <h2>Cube‑Engine</h2>
+  <div id="cube"></div>
+</div>
+
+<div class="block">
+  <h2>Zoom‑Detail‑Sicht</h2>
+  <pre id="zoom">…</pre>
+</div>
+
+<div class="block">
+  <h2>reCALL</h2>
+  <pre id="recall">…</pre>
+</div>
+
+<div class="block">
+  <h2>PUZZLE (outPUZZLE / inPUZZLE / listEDIT / line reORG)</h2>
+  <pre id="puzzle">…</pre>
+</div>
+
+<div class="block">
+  <h2>ARG‑System (arg / xARG / 3te ARG)</h2>
+  <pre id="arg">…</pre>
+</div>
+
+<div class="block">
+  <h2>Heatmap</h2>
+  <pre id="heatmap">…</pre>
+</div>
+
+<div class="block">
+  <h2>Respo‑Vergleich</h2>
+  <pre id="respo">…</pre>
+</div>
+
+<div class="block">
+  <h2>EVO‑Score</h2>
+  <pre id="score">…</pre>
+</div>
+
+</body>
+</html>
