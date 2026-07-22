@@ -1,31 +1,161 @@
+<canvas id="ncCanvas" width="600" height="600"></canvas>
 <script>
 
-// 1. NC Kern laden
-NC.load("tmp.po.raer.tmp");
-NC.load("operator.tmp");
-NC.load("ai.farb.map.tmp");
-NC.load("golden.core.tmp");
+// ---------------------------
+// 1. NC CORE
+// ---------------------------
+const NC = {
+    modules: {},
+    load(name, data) {
+        this.modules[name] = data;
+    },
+    get(name) {
+        return this.modules[name];
+    }
+};
 
-// 2. Lage-Module laden
-NC.load("ort.home.tmp");
-NC.load("home.ort.tmp");
+// ---------------------------
+// 2. MODULES (SIMULATION)
+// ---------------------------
+NC.load("tmp.po.raer.tmp", { phi: 0.8 });
+NC.load("operator.tmp", { weight: 1.2 });
+NC.load("ai.farb.map.tmp", { colors: ["#ff4444", "#44ff44", "#4444ff"] });
+NC.load("golden.core.tmp", { ratio: 1.618 });
 
-// 3. Matrix erzeugen
+NC.load("ort.home.tmp", { x: 3, y: 5 });
+NC.load("home.ort.tmp", { x: 6, y: 2 });
+
+// ---------------------------
+// 3. MATRIX ENGINE
+// ---------------------------
+const Matrix = {
+    grid: [],
+    init(w, h) {
+        this.grid = Array.from({ length: h }, () =>
+            Array.from({ length: w }, () => 0)
+        );
+    }
+};
 Matrix.init(9, 9);
 
-// 4. ORT aktivieren
+// ---------------------------
+// 4. ORT
+// ---------------------------
+const ORT = {
+    value: null,
+    scan(mod) {
+        const m = NC.get(mod);
+        this.value = { x: m.x, y: m.y };
+    }
+};
 ORT.scan("ort.home.tmp");
 
-// 5. HOME aktivieren
+// ---------------------------
+// 5. HOME
+// ---------------------------
+const HOME = {
+    value: null,
+    phi: NC.get("tmp.po.raer.tmp").phi,
+    center(mod) {
+        const m = NC.get(mod);
+        this.value = { x: m.x, y: m.y };
+    }
+};
 HOME.center("home.ort.tmp");
 
-// 6. Delta berechnen
+// ---------------------------
+// 6. DELTA
+// ---------------------------
+const Delta = {
+    value: null,
+    compute(a, b) {
+        this.value = {
+            dx: b.x - a.x,
+            dy: b.y - a.y,
+            dist: Math.sqrt((b.x - a.x)**2 + (b.y - a.y)**2)
+        };
+    }
+};
 Delta.compute(ORT.value, HOME.value);
 
-// 7. Stabilität berechnen
+// ---------------------------
+// 7. STABIL
+// ---------------------------
+const Stabil = {
+    value: null,
+    compute(delta, phi) {
+        this.value = {
+            stability: Math.exp(-delta.dist * phi)
+        };
+    }
+};
 Stabil.compute(Delta.value, HOME.phi);
 
-// 8. RESPO Lage ableiten
+// ---------------------------
+// 8. RESPO
+// ---------------------------
+const RESPO = {
+    value: null,
+    lage(mod) {
+        const m = NC.get(mod);
+        this.value = {
+            x: m.x,
+            y: m.y,
+            response: Stabil.value.stability
+        };
+    }
+};
 RESPO.lage("ort.home.tmp");
+
+// ---------------------------
+// 9. VISUAL RENDER
+// ---------------------------
+function renderNC() {
+    const canvas = document.getElementById("ncCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const cellSize = canvas.width / Matrix.grid[0].length;
+
+    // Draw grid
+    ctx.strokeStyle = "#333";
+    for (let y = 0; y < Matrix.grid.length; y++) {
+        for (let x = 0; x < Matrix.grid[0].length; x++) {
+            ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        }
+    }
+
+    // Draw ORT
+    ctx.fillStyle = "#ff4444";
+    ctx.fillRect(ORT.value.x * cellSize, ORT.value.y * cellSize, cellSize, cellSize);
+
+    // Draw HOME
+    ctx.fillStyle = "#4444ff";
+    ctx.fillRect(HOME.value.x * cellSize, HOME.value.y * cellSize, cellSize, cellSize);
+
+    // Draw DELTA line
+    ctx.strokeStyle = "#44ff44";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(ORT.value.x * cellSize + cellSize/2, ORT.value.y * cellSize + cellSize/2);
+    ctx.lineTo(HOME.value.x * cellSize + cellSize/2, HOME.value.y * cellSize + cellSize/2);
+    ctx.stroke();
+
+    // Draw RESPO intensity
+    const intensity = RESPO.value.response;
+    ctx.fillStyle = `rgba(255,255,0,${intensity})`;
+    ctx.beginPath();
+    ctx.arc(
+        RESPO.value.x * cellSize + cellSize/2,
+        RESPO.value.y * cellSize + cellSize/2,
+        cellSize * intensity * 2,
+        0, Math.PI * 2
+    );
+    ctx.fill();
+}
+
+renderNC();
 
 </script>
