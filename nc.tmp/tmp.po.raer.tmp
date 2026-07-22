@@ -1,0 +1,42 @@
+{
+  "scale": {
+    "master": 1000,
+    "internal": [900,800,700,600,500,400,300,200,100],
+    "cube": [1,2,3,4,8,9]
+  },
+
+  "axis": "6E+6D",
+  "matrix": "9x9",
+
+  "operator": {
+    "switch": "X.tmp",
+    "cycle": "C.tmp",
+    "quad": "Q.tmp",
+    "zero": "Z.tmp",
+
+    "cube.faces": {
+      "1": "rot",
+      "2": "gruen",
+      "3": "gelb",
+      "4": "rot",
+      "8": "gruen",
+      "9": "gelb"
+    }
+  },
+
+  "bind": {
+    "arg": "arg.tmp",
+    "xarg": "xarg.tmp",
+    "meta": "3tearg.tmp",
+    "operator": "operator.tmp"
+  },
+
+  "rotation": "360°",
+  "percent": "100%",
+  "color": ["rot","gruen","gelb"],
+
+  "respo": {
+    "scan": "RESPO_ARG_SCAN.tmp",
+    "output": "scan.respo.core.json"
+  }
+}
