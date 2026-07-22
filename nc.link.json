@@ -1,1 +1,21 @@
+{
+  "nc.link": {
+    "dock6E": {
+      "E": "nc.tmp/tmp.e",
+      "H": "nc.tmp/tmp.h",
+      "G": "nc.tmp/tmp.g",
+      "A": "nc.tmp/tmp.a",
+      "S": "nc.tmp/tmp.s",
+      "O": "nc.tmp/tmp.o"
+    },
+    "lage6D": {
+      "nord": "nc.tmp/nord.tmp",
+      "west": "nc.tmp/west.tmp",
+      "ost": "nc.tmp/ost.tmp",
+      "sued": "nc.tmp/sued.tmp",
+      "up": "nc.tmp/up.tmp",
+      "in": "nc.tmp/in.tmp"
+    }
+  }
+}
 
