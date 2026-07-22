@@ -1,0 +1,12 @@
+{
+  "pipeline": {
+    "0": "state/frame/tick/time",
+    "1": "lage-vektor",
+    "2": "arg/operator/error",
+    "3": "respo-vorbereitung",
+    "4": "bewegung/morph/octa",
+    "6": "respo-ausführung",
+    "RESPO": "bind",
+    "NC": "integration"
+  }
+}
