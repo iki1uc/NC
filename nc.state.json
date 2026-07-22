@@ -1,0 +1,9 @@
+{
+  "nc.state": {
+    "mode": "DELTA",
+    "active": true,
+    "pipeline.ready": true,
+    "respo.ready": true,
+    "score.ready": true
+  }
+}
