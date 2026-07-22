@@ -1,14 +1,17 @@
 {
   "ort": {
-    "lage": "Nord-Ost 3.2",
-    "axis": "NE",
-    "value": 3.2
+    "axis": "USE",
+    "operator": "(+(-(USE)x)y)z)",
+    "value": 3.2,
+    "direction": { "x": +1, "y": -1, "z": +1 }
   },
 
   "home": {
-    "lage": "Zentrum 1.618",
     "axis": "C",
-    "value": 1.618
+    "operator": "(+(-(und(USER)t)b)h)",
+    "value": 1.618,
+    "phi": 1.618,
+    "phi2": 2.618
   },
 
   "delta": {
@@ -16,10 +19,19 @@
     "formula": "ORT.value - HOME.value"
   },
 
+  "stabil": {
+    "value": 0.618,
+    "formula": "delta / phi",
+    "status": "gelb-gruen"
+  },
+
   "respo": {
-    "name": "Nord-Ost-Scan",
+    "name": "USE-C-Lage",
     "lage": "gelb-gruen",
-    "stabil": 0.618,
-    "phi": 1.618
+    "operator": {
+      "ort": "(+(-(USE)x)y)z)",
+      "home": "(+(-(und(USER)t)b)h)"
+    },
+    "stabil": 0.618
   }
 }
