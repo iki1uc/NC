@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>GELB · INDEX · Lauffähigkeit · GEO‑Vektor · NC² · 6D · 12e</title>
+
+<style>
+  body { background:#000; color:#ffff33; font-family:Consolas; padding:20px; }
+  h1,h2 { color:#ffd700; text-shadow:0 0 10px #ff0; }
+  .block { background:#111; border:1px solid #444; padding:15px; margin:20px 0; border-radius:8px; }
+  pre { background:#000; border:1px solid #333; padding:12px; border-radius:6px; }
+
+  .cube-face {
+    width:120px; height:120px;
+    display:inline-flex; align-items:center; justify-content:center;
+    margin:10px; font-weight:bold; cursor:pointer;
+    border:2px solid #222; border-radius:6px;
+  }
+</style>
+
+<script>
+// ------------------------------------------------------
+// GELB INDEX · Lauffähigkeit · GEO‑Vektor · NC² · 6D · 12e
+// ------------------------------------------------------
+
+// verify laden
+async function loadVerify(){
+  const res = await fetch("verify.html");
+  const txt = await res.text();
+  return txt;
+}
+
+// Farb‑Engine für GELB
+function getColor(verify){
+  if(verify.includes("kritisch")) return "#ff9900";   // ORANGE
+  if(verify.includes("neutral")) return "#ffff33";    // GELB
+  return "#666";                                      // fallback
+}
+
+// Cube erzeugen
+function buildCube(verify){
+  const faces = ["Front","Back","Left","Right","Top","Bottom"];
+  const cube = document.getElementById("cube");
+
+  faces.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "cube-face";
+    div.style.background = getColor(verify);
+    div.innerHTML = f;
+    div.onclick = () => zoomDetail(f, verify);
+    cube.appendChild(div);
+  });
+}
+
+// Zoom‑Detail‑Sicht
+function zoomDetail(face, verify){
+  document.getElementById("zoom").textContent =
+    "ZOOM: " + face + "\n\n" + verify;
+}
+
+// GEO‑Vektor‑Raum (NC² / 6D / 12e)
+function geoVector(verify){
+  return {
+    NC2: verify.length,
+    D6: verify.split("\n").length,
+    E12: verify.includes("kritisch") ? "kritisch" : "neutral"
+  };
+}
+
+// PUZZLE – reorganisieren
+function PUZZLE(verify){
+  return verify.split("").reverse().join("").substring(0,200);
+}
+
+// reCALL – Daten zurückholen
+function reCALL(verify){
+  return verify.substring(0,200);
+}
+
+// ARG‑System
+function ARG(verify){
+  return {
+    arg: verify.substring(0,50),
+    xARG: verify.substring(50,100),
+    ARG3: verify.substring(100,150)
+  };
+}
+
+// GELB‑Score
+function buildScore(verify){
+  let score = 0;
+
+  if(verify.includes("neutral")) score += 70;
+  if(verify.includes("kritisch")) score -= 30;
+
+  document.getElementById("score").textContent =
+    "GELB‑Score: " + score + "%";
+}
+
+// Start
+async function start(){
+  const verify = await loadVerify();
+
+  buildCube(verify);
+  buildScore(verify);
+
+  document.getElementById("recall").textContent = reCALL(verify);
+  document.getElementById("puzzle").textContent = PUZZLE(verify);
+
+  const a = ARG(verify);
+  document.getElementById("arg").textContent =
+    "ARG: " + a.arg + "\n\nxARG: " + a.xARG + "\n\n3te ARG: " + a.ARG3;
+
+  const g = geoVector(verify);
+  document.getElementById("geo").textContent =
+    "NC²‑Vektor: " + g.NC2 + "\n" +
+    "6D‑Vektor: " + g.D6 + "\n" +
+    "12e‑Status: " + g.E12;
+}
+</script>
+</head>
+
+<body onload="start()">
+
+<h1>GELB · INDEX · Lauffähigkeit · GEO‑Vektor · NC² · 6D · 12e</h1>
+
+<div class="block">
+  <h2>Cube‑Engine (GELB‑Farb‑Engine)</h2>
+  <div id="cube"></div>
+</div>
+
+<div class="block">
+  <h2>Zoom‑Detail‑Sicht</h2>
+  <pre id="zoom">…</pre>
+</div>
+
+<div class="block">
+  <h2>reCALL</h2>
+  <pre id="recall">…</pre>
+</div>
+
+<div class="block">
+  <h2>PUZZLE (Reorganisation)</h2>
+  <pre id="puzzle">…</pre>
+</div>
+
+<div class="block">
+  <h2>ARG‑System</h2>
+  <pre id="arg">…</pre>
+</div>
+
+<div class="block">
+  <h2>GEO‑Vektor‑Raum (NC² / 6D / 12e)</h2>
+  <pre id="geo">…</pre>
+</div>
+
+<div class="block">
+  <h2>GELB‑Score</h2>
+  <pre id="score">…</pre>
+</div>
+
+</body>
+</html>

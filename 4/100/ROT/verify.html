@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>ROT · VERIFY · NC² · 6D · 12e · 360°</title>
+
+<style>
+  body { background:#000; color:#ff4444; font-family:Consolas; padding:20px; }
+  h1, h2 { color:#ff6666; }
+  .block { background:#111; border:1px solid #333; padding:15px; margin:20px 0; }
+  pre { background:#000; border:1px solid #333; padding:12px; }
+</style>
+
+<script>
+// ------------------------------------------------------
+// ROT VERIFY · NC² · 6D · 12e · Cube/Pyramide/Zylinder
+// ------------------------------------------------------
+
+// Dateien im HH-System
+const FILES = [
+  "BEN.tmp","DA.tmp","NE.tmp",
+  "C.tmp","X.tmp","Z.tmp",
+  "ORT.scan","scan.language",
+  "ID.html","index.html","verify.html"
+];
+
+// Tech-Dateien
+const TECH = [
+  "NC²","NC² (1)","NC²□.sync",
+  "NC²octa².dual","NC²octa²□.merge",
+  "NC²□.lock","NC²□.sync",
+  "NC²□octa³.align",
+  "6D-Baum.raw","12e allin allout.room"
+];
+
+// 360°-Matrix
+function matrix360(){
+  return {
+    cube: {
+      front: null, back: null,
+      left: null, right: null,
+      top: null, bottom: null
+    },
+    pyramide: {
+      spitze: null,
+      basis1: null, basis2: null, basis3: null, basis4: null
+    },
+    zylinder: {
+      kreis: null,
+      hoehe: null
+    },
+    opta2: {},
+    opta3: {},
+    heatmap: {},
+    respo: {},
+    evo: {}
+  };
+}
+
+// Datei laden
+async function loadFile(name){
+  try{
+    const res = await fetch("./" + name);
+    if(!res.ok) return { name, ok:false };
+    const txt = await res.text();
+    return { name, ok:true, content:txt };
+  }catch(e){
+    return { name, ok:false };
+  }
+}
+
+// Ursache/Bezug/Warum bestimmen
+function analyse(content){
+  return {
+    ursache: content.includes("ERR") ? "Fehlerquelle" : "Stabil",
+    bezug: content.length,
+    warum: content.substring(0,50)
+  };
+}
+
+// Start
+async function start(){
+  const results = [];
+
+  // Dateien laden
+  for(const f of [...FILES, ...TECH]){
+    results.push(await loadFile(f));
+  }
+
+  // Ausgabe
+  const out = document.getElementById("verify");
+  results.forEach(r => {
+    const a = r.ok ? analyse(r.content) : { ursache:"FEHLT", bezug:0, warum:"-" };
+
+    const div = document.createElement("div");
+    div.className = "block";
+    div.innerHTML = `
+      <h2>${r.name}</h2>
+      <pre>${r.ok ? r.content.substring(0,300) : "FEHLT"}</pre>
+      <pre>Ursache: ${a.ursache}\nBezug: ${a.bezug}\nWarum: ${a.warum}</pre>
+    `;
+    out.appendChild(div);
+  });
+
+  // 360°-Matrix anzeigen
+  document.getElementById("matrix").textContent =
+    JSON.stringify(matrix360(), null, 2);
+}
+</script>
+</head>
+
+<body onload="start()">
+
+<h1>ROT · VERIFY · NC² · 6D · 12e · 360°</h1>
+
+<div class="block">
+  <h2>Datei‑Status & Analyse</h2>
+  <div id="verify"></div>
+</div>
+
+<div class="block">
+  <h2>360°‑Matrix (Cube / Pyramide / Zylinder / Opta² / Opta³ / Heatmap / Respo / EVO)</h2>
+  <pre id="matrix">…</pre>
+</div>
+
+</body>
+</html>

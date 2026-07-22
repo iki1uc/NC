@@ -1,0 +1,9 @@
+[C.tmp]
+version = 1.0
+type    = "universum-tmp"
+
+tmp.name = "C.tmp"
+tmp.role = "ursache"
+tmp.mode = ["swap","handover","leave","vector"]
+tmp.output = "C.tmp.final"
+tmp.state  = "active"
