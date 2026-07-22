@@ -1,0 +1,8 @@
+{
+  "nc.overdrive": {
+    "boost": true,
+    "mode": "DELTA",
+    "vector": "12E",
+    "matrix": "9x9"
+  }
+}
