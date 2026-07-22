@@ -1,108 +1,31 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>NC System – 9×9</title>
-
-<style>
-    body { background:#111; color:#eee; font-family:Arial; text-align:center; }
-    #board {
-        display:grid;
-        grid-template-columns:repeat(9, 50px);
-        grid-template-rows:repeat(9, 50px);
-        gap:4px;
-        margin:40px auto;
-        width:480px;
-    }
-    .cell {
-        width:50px; height:50px;
-        background:#222;
-        border:1px solid #444;
-        font-size:28px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        cursor:pointer;
-        transition:0.2s;
-    }
-    .cell:hover { background:#333; }
-
-    .rot   { color:#ff4444; }
-    .gruen { color:#44ff44; }
-    .gelb  { color:#ffff44; }
-</style>
-</head>
-
-<body>
-
-<h1>NC – 9×9 Matrix</h1>
-<div id="board"></div>
-
 <script>
-    // 1000 → Oberstufe
-    const NC_SCALE = {
-        master: 1000,
-        internal: [900,800,700,600,500,400,300,200,100],
-        cube: [1,2,3,4,8,9]
-    };
 
-    // ROT → GRÜN → GELB
-    let current = "rot";
+// 1. NC Kern laden
+NC.load("tmp.po.raer.tmp");
+NC.load("operator.tmp");
+NC.load("ai.farb.map.tmp");
+NC.load("golden.core.tmp");
 
-    function nextPlayer() {
-        if (current === "rot") current = "gruen";
-        else if (current === "gruen") current = "gelb";
-        else current = "rot";
-    }
+// 2. Lage-Module laden
+NC.load("ort.home.tmp");
+NC.load("home.ort.tmp");
 
-    // RESPO SEND
-    function sendEvent(x, y, player) {
-        console.log("SEND:", {x, y, player});
-    }
+// 3. Matrix erzeugen
+Matrix.init(9, 9);
 
-    // ORT RECEIVE
-    function receiveEvent(x, y, player) {
-        console.log("RECEIVE:", {x, y, player});
-    }
+// 4. ORT aktivieren
+ORT.scan("ort.home.tmp");
 
-    // 6D – alle Richtungen offen
-    function sixD(x, y) {
-        return {
-            plusX: x+1, minusX: x-1,
-            plusY: y+1, minusY: y-1,
-            plusZ: "open", minusZ: "open"
-        };
-    }
+// 5. HOME aktivieren
+HOME.center("home.ort.tmp");
 
-    // 9×9 erzeugen
-    const board = document.getElementById("board");
+// 6. Delta berechnen
+Delta.compute(ORT.value, HOME.value);
 
-    for (let y = 0; y < 9; y++) {
-        for (let x = 0; x < 9; x++) {
+// 7. Stabilität berechnen
+Stabil.compute(Delta.value, HOME.phi);
 
-            const cell = document.createElement("div");
-            cell.classList.add("cell");
-            cell.dataset.x = x;
-            cell.dataset.y = y;
+// 8. RESPO Lage ableiten
+RESPO.lage("ort.home.tmp");
 
-            cell.addEventListener("click", () => {
-                if (cell.innerHTML !== "") return;
-
-                cell.innerHTML = "●";
-                cell.classList.add(current);
-
-                sendEvent(x, y, current);
-                receiveEvent(x, y, current);
-
-                console.log("6D:", sixD(x, y));
-
-                nextPlayer();
-            });
-
-            board.appendChild(cell);
-        }
-    }
 </script>
-
-</body>
-</html>
