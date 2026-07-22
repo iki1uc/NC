@@ -1,0 +1,7 @@
+{
+  "respo.bind": {
+    "frame": "pipeline.3/respo.frame",
+    "execute": "pipeline.6/output",
+    "merge": "nc.tmp"
+  }
+}
