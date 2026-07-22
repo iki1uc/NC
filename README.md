@@ -1,11 +1,12 @@
 NC – Neural Construct System
-Ein modulares Lage‑, Operator‑ und Stabilitäts‑System basierend auf:
+Ein modulares, operator‑basiertes Lage‑ und Stabilitäts‑Framework zur Analyse, Bewertung und Ableitung von Positions‑ und Strukturinformationen.
+NC ist vollständig modular aufgebaut und nutzt:
 
 ORT (Lage‑Scanner)
 
 HOME (Zentrum / Soll‑Punkt)
 
-RESPO (Reaktion / Ableitung)
+RESPO (Reaktion / Lage‑Ableitung)
 
 Operator‑Formeln
 
@@ -19,25 +20,37 @@ tmp‑Module
 
 AI‑Farblogik (ROT / GRÜN / GELB)
 
-📌 Systemübersicht
-NC besteht aus mehreren Kernmodulen:
+1. Architekturübersicht
+1.1 Kernmodule
+Modul	Aufgabe
+ORT	Erfasst Lage, Richtung, Achse, Operator‑Formeln
+HOME	Definiert Zentrum, Soll‑Wert, Phi‑Stabilität
+RESPO	Leitet Lage, Stabilität, Farbe und Operator‑Status ab
+Operator.tmp	Enthält Operator‑Regeln und Syntax
+tmp.po.raer.tmp	Stufen, Skalierung, 1000‑Master
+ai.farb.map.tmp	Farb‑Matrix (ROT/GRÜN/GELB)
+golden.core.tmp	Phi‑Werte, Stabilitätsformeln
+nc.tmp/	Lage‑Dateien (ort.home.tmp, home.ort.tmp)
+index.html	Zentrale Steuerung, Loader, Matrix‑Initialisierung
 
-ORT → erkennt Lage, Richtung, Achse
 
-HOME → definiert Zentrum, Stabilität, Phi
-
-RESPO → leitet Lage + Stabilität ab
-
-Operatoren → mathematische Klammer‑Formeln
-
-tmp.po.raer.tmp → Stufen, Skalierung, 1000‑Master
-
-nc.tmp/ → Lage‑Dateien (ort.home.tmp, home.ort.tmp)
-
-index.html → zentrale Steuerung
-
-📌 Lage‑Modul: ORT → HOME
-Datei: /NC/nc.tmp/ort.home.tmp
+2. Dateistruktur
+Code
+NC/
+│
+├── index.html
+│
+├── operator.tmp
+├── tmp.po.raer.tmp
+├── ai.farb.map.tmp
+├── golden.core.tmp
+│
+└── nc.tmp/
+    ├── ort.home.tmp
+    └── home.ort.tmp
+3. Lage‑Modul: ORT → HOME
+Datei:
+/NC/nc.tmp/ort.home.tmp
 
 Code
 {
@@ -77,7 +90,101 @@ Code
     "stabil": 0.618
   }
 }
-📌 index.html – Modul‑Loader
+4. Operator‑System
+4.1 Syntax
+Operatoren folgen einer Klammer‑basierten Prioritätslogik:
+
+ORT‑Operator
+Code
+(+(-(USE)x)y)z)
+HOME‑Operator
+Code
+(+(-(und(USER)t)b)h)
+4.2 Bedeutung
++ / - → Richtung / Polarität
+
+USE / USER → Achsen
+
+x / y / z / t / b / h → 6D‑Richtungen
+
+Klammern → Priorität
+
+Verschachtelung → Lage‑Tiefe
+
+Operatoren beeinflussen:
+
+Delta‑Berechnung
+
+Stabilitätswert
+
+Farbzuordnung
+
+Matrix‑Position
+
+5. Phi‑Stabilität
+5.1 Goldener Schnitt
+Φ
+=
+1.618
+Φ
+2
+=
+2.618
+5.2 Delta
+Δ
+=
+𝑂
+𝑅
+𝑇
+−
+𝐻
+𝑂
+𝑀
+𝐸
+5.3 Stabilität
+𝑆
+𝑡
+𝑎
+𝑏
+𝑖
+𝑙
+=
+Δ
+Φ
+Beispiel:
+
+1.582
+1.618
+=
+0.978
+≈
+0.618
+6. Farben (AI‑Farblogik)
+Farbe	Achse	Bedeutung
+ROT	E1	kritisch
+GRÜN	E2	stabil
+GELB	E3	Warnung
+
+
+Lagefarbe im Beispiel:
+gelb‑grün → leicht über Phi², stabil mit Warnung.
+
+7. Matrix 9×9
+index.html erzeugt eine 9×9‑Matrix mit:
+
+Farben
+
+Operatoren
+
+Lage‑Events
+
+RESPO‑Reaktionen
+
+Achsen
+
+Stabilitätswerten
+
+8. index.html – Modul‑Loader
 index.html muss alle Module laden:
 
 Code
@@ -90,68 +197,32 @@ NC.load("ort.home.tmp");
 NC.load("home.ort.tmp");
 
 RESPO.lage("ort.home.tmp");
-📌 Operator‑System
-Beispiel‑Operatoren:
+9. Entwickler‑Hinweise
+Module müssen explizit geladen werden
 
-ORT:
+Operatoren müssen syntaktisch korrekt sein
 
-Code
-(+(-(USE)x)y)z)
-HOME:
+Phi‑Werte dürfen nicht verändert werden
 
-Code
-(+(-(und(USER)t)b)h)
-Diese Operatoren definieren:
+ORT/HOME müssen bidirektional definiert sein
 
-Achsen
+RESPO muss immer Lage + Stabilität ausgeben
 
-Richtung
+Matrix muss vor RESPO initialisiert werden
 
-Priorität
+10. Weiterentwicklung
+Empfohlene Erweiterungen:
 
-Lage‑Abweichung
+Operator‑Parser
 
-Stabilitäts‑Berechnung
+Matrix‑Event‑System
 
-📌 Phi‑Stabilität
-Φ
-=
-1.618
-Δ
-=
-𝑂
-𝑅
-𝑇
-−
-𝐻
-𝑂
-𝑀
-𝐸
-𝑆
-𝑡
-𝑎
-𝑏
-𝑖
-𝑙
-=
-Δ
-Φ
-📌 Farben
-ROT = E1
+AI‑Farb‑Optimierung
 
-GRÜN = E2
+Multi‑Phi‑Stabilität
 
-GELB = E3
+12D‑Achsen
 
-Lagefarbe = gelb‑grün
+NC.auto() Loader
 
-📌 Matrix 9×9
-index.html erzeugt eine 9×9‑Matrix mit:
-
-Farben
-
-Operatoren
-
-Lage‑Events
-
-RESPO‑Reaktionen
+Visualisierung der Operator‑Struktur
