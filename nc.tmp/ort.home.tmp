@@ -1,0 +1,25 @@
+{
+  "ort": {
+    "lage": "Nord-Ost 3.2",
+    "axis": "NE",
+    "value": 3.2
+  },
+
+  "home": {
+    "lage": "Zentrum 1.618",
+    "axis": "C",
+    "value": 1.618
+  },
+
+  "delta": {
+    "value": 1.582,
+    "formula": "ORT.value - HOME.value"
+  },
+
+  "respo": {
+    "name": "Nord-Ost-Scan",
+    "lage": "gelb-gruen",
+    "stabil": 0.618,
+    "phi": 1.618
+  }
+}
