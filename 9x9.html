@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>NC 9×9</title>
+
+<style>
+    body { background:#111; color:#eee; font-family:Arial; text-align:center; }
+    #board {
+        display:grid;
+        grid-template-columns:repeat(9, 50px);
+        grid-template-rows:repeat(9, 50px);
+        gap:4px;
+        margin:40px auto;
+        width:480px;
+    }
+    .cell {
+        width:50px; height:50px;
+        background:#222;
+        border:1px solid #444;
+        font-size:28px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        transition:0.2s;
+    }
+    .cell:hover { background:#333; }
+
+    .rot   { color:#ff4444; }
+    .gruen { color:#44ff44; }
+    .gelb  { color:#ffff44; }
+</style>
+</head>
+
+<body>
+
+<h1>NC 9×9 – offene Matrix</h1>
+<div id="board"></div>
+
+<script>
+    const board = document.getElementById("board");
+
+    // ROT → GRÜN → GELB → ROT
+    let current = "rot";
+
+    function nextPlayer() {
+        if (current === "rot") current = "gruen";
+        else if (current === "gruen") current = "gelb";
+        else current = "rot";
+    }
+
+    // SENDEN (RESPO)
+    function sendEvent(x, y, player) {
+        console.log("SEND:", {x, y, player});
+    }
+
+    // EMPFANGEN (ORT)
+    function receiveEvent(x, y, player) {
+        console.log("RECEIVE:", {x, y, player});
+    }
+
+    // 9×9 erzeugen
+    for (let y = 0; y < 9; y++) {
+        for (let x = 0; x < 9; x++) {
+
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.dataset.x = x;
+            cell.dataset.y = y;
+
+            cell.addEventListener("click", () => {
+                if (cell.innerHTML !== "") return;
+
+                cell.innerHTML = "●";
+                cell.classList.add(current);
+
+                sendEvent(x, y, current);
+                receiveEvent(x, y, current);
+
+                nextPlayer();
+            });
+
+            board.appendChild(cell);
+        }
+    }
+</script>
+
+</body>
+</html>
