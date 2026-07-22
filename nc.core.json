@@ -1,1 +1,7 @@
+{
+  "nc.id": "NC",
+  "nc.state": "ACTIVE",
+  "nc.level": "DELTA",
+  "nc.pipeline": ["0","1","2","3","4","6","RESPO","NC"]
+}
 
