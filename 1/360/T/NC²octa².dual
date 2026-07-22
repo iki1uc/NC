@@ -1,0 +1,9 @@
+NC.².dual = {
+    id: "NC².dual",
+    axis_nc2: "□",
+    axis_octa: "octa²",
+    bind: "NC².bind",
+    align: "NC².align",
+    pulse: "NC².pulse",
+    error: "NC².error"
+}

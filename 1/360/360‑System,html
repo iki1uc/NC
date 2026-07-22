@@ -1,0 +1,10 @@
+NAME = 360
+SYSTEM = 6E
+MODUL = 360
+DIM = ROT
+ROLLE = Vollrotation
+FUNKTION = Rotiert alle Achsen
+DNA = Α64
+ROUTER = 6D-Router-Matrix
+STATUS = STABIL
+READY = 100%
