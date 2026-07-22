@@ -1,1 +1,9 @@
+{
+  "score": {
+    "matrix": "matrix.512.json",
+    "respo": "scan.respo.core.json",
+    "mode": "9x9",
+    "output": "score.tmp"
+  }
+}
 
