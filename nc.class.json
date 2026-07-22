@@ -1,0 +1,9 @@
+{
+  "nc.class": {
+    "root": "NC",
+    "motor": "RESPO",
+    "score": "SCORE",
+    "matrix": "9x9",
+    "tmp": "31"
+  }
+}
