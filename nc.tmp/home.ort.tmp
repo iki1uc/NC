@@ -1,59 +1,35 @@
 {
   "ort": {
-    "name": "Nord-Ost-Scan",
-    "lage": "Nord-Ost",
-    "axis": "NE",
+    "axis": "USE",
+    "operator": "(+(-(USE)x)y)z)",
     "value": 3.2,
-    "richtung": {
-      "x": "+",
-      "y": "+",
-      "z": "offen"
-    }
+    "direction": { "x": +1, "y": -1, "z": +1 }
   },
 
   "home": {
-    "name": "Zentrum",
-    "lage": "Center",
     "axis": "C",
+    "operator": "(+(-(und(USER)t)b)h)",
     "value": 1.618,
-    "phi": 1.6180339887
+    "phi": 1.618,
+    "phi2": 2.618
   },
 
   "delta": {
     "value": 1.582,
-    "formula": "ORT.value - HOME.value",
-    "phi": 1.618,
-    "phi2": 2.618
+    "formula": "ORT.value - HOME.value"
   },
 
   "stabil": {
     "value": 0.618,
     "formula": "delta / phi",
-    "threshold": 0.618,
     "status": "gelb-gruen"
   },
 
-  "farbe": {
-    "rot":   { "axis": "E1", "wert": 1 },
-    "gruen": { "axis": "E2", "wert": 2 },
-    "gelb":  { "axis": "E3", "wert": 3 },
-    "lage.farbe": "gelb-gruen"
-  },
-
   "respo": {
-    "name": "Nord-Ost-Scan",
+    "name": "USE-C-Lage",
     "lage": "gelb-gruen",
-    "stabil": 0.618,
-    "delta": 1.582,
-    "axis": "NE",
-    "center": "C"
-  },
-
-  "bind": {
-    "scale": "tmp.po.raer.tmp",
-    "operator": "operator.tmp",
-    "color": "ai.farb.map.tmp",
-    "respo": "RESPO_ARG_SCAN.tmp",
-    "ort": "ORT.scan"
+    "operator.ort": "(+(-(USE)x)y)z)",
+    "operator.home": "(+(-(und(USER)t)b)h)",
+    "stabil": 0.618
   }
 }
