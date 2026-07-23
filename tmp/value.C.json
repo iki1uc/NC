@@ -1,1 +1,11 @@
+{
+  "value": "C",
+  "type": "currency",
+  "role": "user-value",
+  "desc": "User-Wertparameter (z.B. €, Punkte, Potential)",
+  "default": 1,
+  "min": 0,
+  "max": 999999,
+  "next": "X.room.IN"
+}
 
