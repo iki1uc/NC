@@ -1,1 +1,9 @@
+{
+  "room": "X.room.OUT",
+  "type": "output",
+  "role": "end",
+  "desc": "Ausgangsraum für Ausgabe und Session-Ende",
+  "prev": "X.room.CORE",
+  "next": null
+}
 
