@@ -1,1 +1,9 @@
+{
+  "lang": "EN",
+  "type": "language",
+  "role": "user-language",
+  "desc": "English as active user language",
+  "fallback": "EN",
+  "next": "CR"
+}
 
