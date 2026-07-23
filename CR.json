@@ -1,1 +1,8 @@
+{
+  "room": "CR",
+  "type": "trigger",
+  "role": "enter",
+  "desc": "Startimpuls für User-Session",
+  "next": "X.room.IN"
+}
 
