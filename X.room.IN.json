@@ -1,1 +1,9 @@
+{
+  "room": "X.room.IN",
+  "type": "input",
+  "role": "user-entry",
+  "desc": "Eingangsraum für User-Daten",
+  "prev": "CR",
+  "next": "X.room.CORE"
+}
 
