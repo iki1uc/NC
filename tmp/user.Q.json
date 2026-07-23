@@ -1,1 +1,10 @@
+{
+  "user": "Q",
+  "type": "intent",
+  "role": "user-intent",
+  "desc": "User-Auswahlparameter (Intent, Richtung, Fokus)",
+  "options": ["calc", "score", "mystery", "room"],
+  "default": "room",
+  "next": "CR"
+}
 
