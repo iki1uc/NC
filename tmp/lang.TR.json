@@ -1,1 +1,9 @@
+{
+  "lang": "TR",
+  "type": "language",
+  "role": "user-language",
+  "desc": "Türkçe kullanıcı dili",
+  "fallback": "EN",
+  "next": "CR"
+}
 
