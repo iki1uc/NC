@@ -1,0 +1,10 @@
+{
+  "mode": "X",
+  "type": "mode",
+  "role": "user-mode",
+  "desc": "X-Mode für erweiterten NC-Betrieb",
+  "states": ["normal", "extended", "debug"],
+  "default": "normal",
+  "next": "CR"
+}
+
