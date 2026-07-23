@@ -1,1 +1,9 @@
+{
+  "room": "X.room.CORE",
+  "type": "core",
+  "role": "processing",
+  "desc": "Kernraum für Verarbeitung und NC-Bindung",
+  "prev": "X.room.IN",
+  "next": "X.room.OUT"
+}
 
