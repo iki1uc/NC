@@ -1,8 +1,26 @@
-<canvas id="ncCanvas" width="600" height="600"></canvas>
-<script>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>NC · CORE · ULTRA3.0</title>
 
+<style>
+body { background:#000; color:#0f0; font-family:Consolas, monospace; padding:20px; }
+pre { background:#111; padding:10px; border-left:3px solid #0f0; }
+canvas { border:1px solid #0f0; margin-top:20px; }
+button { background:#0f0; color:#000; padding:10px 20px; border:none; cursor:pointer; }
+</style>
+</head>
+
+<body>
+
+<h1>NC · CORE · ULTRA3.0</h1>
+
+<canvas id="ncCanvas" width="600" height="600"></canvas>
+
+<script>
 // ---------------------------
-// 1. NC CORE
+// NC CORE
 // ---------------------------
 const NC = {
     modules: {},
@@ -15,7 +33,7 @@ const NC = {
 };
 
 // ---------------------------
-// 2. MODULES (SIMULATION)
+// MODULES
 // ---------------------------
 NC.load("tmp.po.raer.tmp", { phi: 0.8 });
 NC.load("operator.tmp", { weight: 1.2 });
@@ -25,63 +43,8 @@ NC.load("golden.core.tmp", { ratio: 1.618 });
 NC.load("ort.home.tmp", { x: 3, y: 5 });
 NC.load("home.ort.tmp", { x: 6, y: 2 });
 
-<canvas id="ncCheck" width="600" height="600"></canvas>
-<script type="module">
-import { NC_PRUEFUNG } from "./NC.pruefung.js";
-
-const stations = [
-    "CPU", "GPU", "RAM", "X4", "CACHE",
-    "NC", "NC.vector", "NC.link", "NC.net",
-    "IEO", "PQ", "PX", "ME", "UN", "213", "243",
-    "d:/tmp", "r:/tmp", "c:/tmp",
-    "X81", "P81", "Q81", "81.tmp", "IX", "XI"
-];
-
-async function runCheck(){
-
-    const checker = NC_PRUEFUNG;
-
-    for(const s of stations){
-        const sysIn = await import(`./${s}/sys.in.json`, { assert: { type: "json" }});
-        const sysOut = await import(`./${s}/sys.out.json`, { assert: { type: "json" }});
-        const sysScale = await import(`./${s}/sys.scale.json`, { assert: { type: "json" }});
-        const sysHdf = await import(`./${s}/sys.hdf.json`, { assert: { type: "json" }});
-
-        checker.checkStation(s, sysIn.default, sysOut.default, sysScale.default, sysHdf.default);
-    }
-
-    const state = checker.finalize();
-    renderCheck(checker.results, state);
-}
-
-function renderCheck(results, state){
-    const canvas = document.getElementById("ncCheck");
-    const ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0,0,600,600);
-
-    ctx.fillStyle = state === "NEVADA" ? "#00ff00" : "#ff0000";
-    ctx.font = "24px monospace";
-    ctx.fillText("STATE: " + state, 20, 40);
-
-    let y = 80;
-    for(const r of Object.values(results)){
-        ctx.fillStyle = r.color === "gruen" ? "#00ff00" : "#ff0000";
-        ctx.fillRect(20, y, 20, 20);
-
-        ctx.fillStyle = "#0f0";
-        ctx.fillText(r.name, 60, y + 16);
-
-        y += 30;
-    }
-}
-
-runCheck();
-
-    
-    // ---------------------------
-// 3. MATRIX ENGINE
+// ---------------------------
+// MATRIX ENGINE
 // ---------------------------
 const Matrix = {
     grid: [],
@@ -94,7 +57,7 @@ const Matrix = {
 Matrix.init(9, 9);
 
 // ---------------------------
-// 4. ORT
+// ORT
 // ---------------------------
 const ORT = {
     value: null,
@@ -106,7 +69,7 @@ const ORT = {
 ORT.scan("ort.home.tmp");
 
 // ---------------------------
-// 5. HOME
+// HOME
 // ---------------------------
 const HOME = {
     value: null,
@@ -119,7 +82,7 @@ const HOME = {
 HOME.center("home.ort.tmp");
 
 // ---------------------------
-// 6. DELTA
+// DELTA
 // ---------------------------
 const Delta = {
     value: null,
@@ -134,7 +97,7 @@ const Delta = {
 Delta.compute(ORT.value, HOME.value);
 
 // ---------------------------
-// 7. STABIL
+// STABIL
 // ---------------------------
 const Stabil = {
     value: null,
@@ -147,7 +110,7 @@ const Stabil = {
 Stabil.compute(Delta.value, HOME.phi);
 
 // ---------------------------
-// 8. RESPO
+// RESPO
 // ---------------------------
 const RESPO = {
     value: null,
@@ -163,7 +126,7 @@ const RESPO = {
 RESPO.lage("ort.home.tmp");
 
 // ---------------------------
-// 9. VISUAL RENDER
+// VISUAL RENDER
 // ---------------------------
 function renderNC() {
     const canvas = document.getElementById("ncCanvas");
@@ -214,3 +177,6 @@ function renderNC() {
 renderNC();
 
 </script>
+
+</body>
+</html>
