@@ -25,7 +25,62 @@ NC.load("golden.core.tmp", { ratio: 1.618 });
 NC.load("ort.home.tmp", { x: 3, y: 5 });
 NC.load("home.ort.tmp", { x: 6, y: 2 });
 
-// ---------------------------
+<canvas id="ncCheck" width="600" height="600"></canvas>
+<script type="module">
+import { NC_PRUEFUNG } from "./NC.pruefung.js";
+
+const stations = [
+    "CPU", "GPU", "RAM", "X4", "CACHE",
+    "NC", "NC.vector", "NC.link", "NC.net",
+    "IEO", "PQ", "PX", "ME", "UN", "213", "243",
+    "d:/tmp", "r:/tmp", "c:/tmp",
+    "X81", "P81", "Q81", "81.tmp", "IX", "XI"
+];
+
+async function runCheck(){
+
+    const checker = NC_PRUEFUNG;
+
+    for(const s of stations){
+        const sysIn = await import(`./${s}/sys.in.json`, { assert: { type: "json" }});
+        const sysOut = await import(`./${s}/sys.out.json`, { assert: { type: "json" }});
+        const sysScale = await import(`./${s}/sys.scale.json`, { assert: { type: "json" }});
+        const sysHdf = await import(`./${s}/sys.hdf.json`, { assert: { type: "json" }});
+
+        checker.checkStation(s, sysIn.default, sysOut.default, sysScale.default, sysHdf.default);
+    }
+
+    const state = checker.finalize();
+    renderCheck(checker.results, state);
+}
+
+function renderCheck(results, state){
+    const canvas = document.getElementById("ncCheck");
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0,0,600,600);
+
+    ctx.fillStyle = state === "NEVADA" ? "#00ff00" : "#ff0000";
+    ctx.font = "24px monospace";
+    ctx.fillText("STATE: " + state, 20, 40);
+
+    let y = 80;
+    for(const r of Object.values(results)){
+        ctx.fillStyle = r.color === "gruen" ? "#00ff00" : "#ff0000";
+        ctx.fillRect(20, y, 20, 20);
+
+        ctx.fillStyle = "#0f0";
+        ctx.fillText(r.name, 60, y + 16);
+
+        y += 30;
+    }
+}
+
+runCheck();
+
+    
+    // ---------------------------
 // 3. MATRIX ENGINE
 // ---------------------------
 const Matrix = {
